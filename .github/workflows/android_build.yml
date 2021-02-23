@@ -30,7 +30,8 @@ jobs:
           name: app
           path: ./Exercise/FacebookApi/app/build/outputs/apk/debug/app-debug.apk
 
-      - uses: actions/download-artifact@v1
+      - name: Download artifact
+        uses: actions/download-artifact@v1
         with:
           name: app-debug
           path: ./Exercise/FacebookApi/app/build/outputs/apk/debug/app-debug.apk
