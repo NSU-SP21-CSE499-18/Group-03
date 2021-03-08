@@ -32,14 +32,17 @@
 <p><h2>1.1 Purpose:</h2></p>
 
 <p>
-This read me file holds the features of our project, Social Media Schedular. The goal of the SRS is to put all the ideas together and have a documentation of it. This will have a detailed information for the project we have planned for.
+The pupose of the project is to make people's day to day life easier, give them the oppurtunity to use social media's remotely and they can easily maintain their social media accounts from one hub and post when they are on the roam. 
 </p>
 <p><h2>1.2 Documentation Conventions:</h2></p>
 <p>
 We made this Documentation after a lot web research online so there no particular Documentation Convertion for this.
 </p>
 <p><h2>1.3 Intended Audience & Reading Suggestion:</h2></p>
-<p>This readme file is for the developers, our faculty and Any user. In further cases, if we want to implement it for business purposes a business on it then the marketing team and administrator can also read it.
+<p>The TG for this project is everyone who is using social media.</p>
+<br>
+<p>
+    This readme file is for the developers, our faculty and Any user. In further cases, if we want to implement it for business purposes a business on it then the marketing team and administrator can also read it.
 </p>
 <p><h2>1.4 Product Scope:</h2></p>
 
@@ -79,11 +82,11 @@ TBA
 <p>Communication Interface in one word is the internet. So we need to be connected by LAN/WAN network when we intiate the post.
     </p>
 <p><h2>3.5 Tools:
-<p><li>Framework: Kotlin</li>
+<p><li>Language: Kotlin</li>
 <li>Database: Firebase[most likely]</li>
 <li>API</li>
     <p><h1>4. System Features</h1>
     TBA</p>
     <p><h1>5. Other non-functional Requirement</h1>
     <h1><strong>Plans for Monetization:</strong></h1>
-<p1>This will be a totally free application. The only way to gerenate revenue is through ads.           </p1>
+<p1>This will be a totally free application. The only way to gerenate revenue is through ads. [That's the initial plan, might change later]           </p1>
