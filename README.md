@@ -9,18 +9,29 @@
 <p align="center"><strong>Project Name</strong>: Social Media Scheduler</p>
 <p align="center"><strong>Course</strong>: CSE 499A <strong>Sec</strong><strong>:</strong> 18</p>
 <p align="center"><strong>Faculty</strong>: Shaikh Shawon Arefin Shimon (Sas3)</p>
+<p align="center"><strong><u>Group Members</u></strong><u>:</u></p>
+<p align="center"><strong><u>Member 1</u></strong>
+
+| Name        | ID           | Email  |
+| ------------- |:-------------:| -----:|
+| Yeahia Md. Arif| 1410070042 | yeahia.arif@northsouth.edu|
+| Jahin Mahbub      | 1531552642      |   jahin.mahbub@northsouth.edu |
+| Md Hasib Zaman | 1712609642      |    hasib.zaman@northsouth.edu |
+</p>
+<!--
 <p align="center"><strong><u>Member 1</u></strong><u>:</u></p>
 <p align="center"><strong>Name</strong><strong>:</strong> Yeahia Md. Arif </p>
 <p align="center"><strong>ID</strong><strong>:&nbsp; </strong>1410070042</p>
-<p align="center"><strong>Email</strong><strong>:</strong> <a href="mailto:ferdous.islam@northsouth.edu">yeahia.arif@northsouth.edu</a></p>
+<p align="center"><strong>Email</strong><strong>:</strong> <a href="mailto:yeahia.arif@northsouth.edu">yeahia.arif@northsouth.edu</a></p>
 <p align="center"><strong><u>Member 2</u></strong><strong><u>:</u></strong></p>
 <p align="center"><strong>Name</strong><strong>:</strong> Jahin Mahbub</p>
 <p align="center"><strong>ID</strong><strong>:&nbsp; </strong>1531552642</p>
-<p align="center"><strong>Email</strong><strong>:</strong> <a href="mailto:rifat.islam173@northsouth.edu">jahin.mahbub@northsouth.edu</a></p>
+<p align="center"><strong>Email</strong><strong>:</strong> <a href="mailto:jahin.mahbub@northsouth.edu">jahin.mahbub@northsouth.edu</a></p>
 <p align="center"><strong><u>Member 3</u></strong><strong><u>:</u></strong></p>
 <p align="center"><strong>Name</strong><strong>:</strong> Md Hasib Zaman</p>
 <p align="center"><strong>ID</strong><strong>:&nbsp; </strong>1712603642</p>
-<p align="center"><strong>Email</strong><strong>:</strong> <a href="mailto:ashfaq.jamil@northsouth.edu">hasib.zaman@northsouth.edu</a></p>
+<p align="center"><strong>Email</strong><strong>:</strong> <a href="mailto:hasib.zaman@northsouth.edu">hasib.zaman@northsouth.edu</a></p>
+-->
 <p align="center"><strong>Git Repository</strong><strong>: </strong><a href="https://github.com/NSU-SP21-CSE499-18/Group-03">https://github.com/NSU-SP21-CSE499-18/Group-03</a></p>
 <p align="center"><strong>Date Submitted</strong><strong>: </strong>05/03/21</p>
 
