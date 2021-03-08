@@ -10,12 +10,13 @@
 <p align="center"><strong>Course</strong>: CSE 499A <strong>Sec</strong><strong>:</strong> 18</p>
 <p align="center"><strong>Faculty</strong>: Shaikh Shawon Arefin Shimon (Sas3)</p>
 <p align="center"><strong><u>Group Members</u></strong><u>:</u></p>
-
-:| Name        | ID           | Email  |:
-:| :-------------: |:-------------:| :-----:|:
-:| Yeahia Md. Arif| 1410070042 | yeahia.arif@northsouth.edu|:
-:| Jahin Mahbub      | 1531552642      |   jahin.mahbub@northsouth.edu |:
-:| Md Hasib Zaman | 1712609642      |    hasib.zaman@northsouth.edu |:
+<p align="center">
+| Name        | ID           | Email  |
+| :-------------: |:-------------:| :-----:|
+| Yeahia Md. Arif| 1410070042 | yeahia.arif@northsouth.edu|
+| Jahin Mahbub      | 1531552642      |   jahin.mahbub@northsouth.edu |
+| Md Hasib Zaman | 1712609642      |    hasib.zaman@northsouth.edu |
+</p>
 <!--
 <p align="center"><strong><u>Member 1</u></strong><u>:</u></p>
 <p align="center"><strong>Name</strong><strong>:</strong> Yeahia Md. Arif </p>
