@@ -11,11 +11,11 @@
 <p align="center"><strong>Faculty</strong>: Shaikh Shawon Arefin Shimon (Sas3)</p>
 <p align="center"><strong><u>Group Members</u></strong><u>:</u></p>
 
-| Name        | ID           | Email  |
-| :-------------: |:-------------:| :-----:|
-| Yeahia Md. Arif| 1410070042 | yeahia.arif@northsouth.edu|
-| Jahin Mahbub      | 1531552642      |   jahin.mahbub@northsouth.edu |
-| Md Hasib Zaman | 1712609642      |    hasib.zaman@northsouth.edu |
+:| Name        | ID           | Email  |:
+:| :-------------: |:-------------:| :-----:|:
+:| Yeahia Md. Arif| 1410070042 | yeahia.arif@northsouth.edu|:
+:| Jahin Mahbub      | 1531552642      |   jahin.mahbub@northsouth.edu |:
+:| Md Hasib Zaman | 1712609642      |    hasib.zaman@northsouth.edu |:
 <!--
 <p align="center"><strong><u>Member 1</u></strong><u>:</u></p>
 <p align="center"><strong>Name</strong><strong>:</strong> Yeahia Md. Arif </p>
@@ -97,5 +97,5 @@ TBA
     <p><h1>4. System Features</h1>
     TBA</p>
     <p><h1>5. Other non-functional Requirement</h1>
-    <h1><strong>Plans for Monetization:</strong></h1>
+    <h2><strong>Plans for Monetization:</strong></h2>
 <p1>This will be a totally free application. The only way to gerenate revenue is through ads. [That's the initial plan, might change later]           </p1>
