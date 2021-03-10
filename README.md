@@ -72,7 +72,7 @@ MockFlow web app was used to create demo UI.
 Use case diagram for the product:
 
 </p>
-<p align="center"><strong><img src="Documentation/public/img/UML%20use%20case%20diagram%20example.png" alt="" width="614" height="344" /></strong></p>
+<p align="center"><strong><img src="Documentation/public/img/UML%20use%20case%20diagram%20example.png" alt="" width="614" height="450" /></strong></p>
 <p align='center'> 
 Image
 fig 2.2.1
