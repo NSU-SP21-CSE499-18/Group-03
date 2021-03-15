@@ -1,4 +1,4 @@
-name : Android Build
+name : Exercise Project Build
 
 on:
   pull_request:
