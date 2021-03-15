@@ -11,7 +11,7 @@
 <p align="center"><strong>Faculty</strong>: Shaikh Shawon Arefin Shimon (Sas3)</p>
 <p align="center"><strong><u>Group Members</u></strong><u>:</u></p>
 
-| Name        | ID           | Email  |
+| Name        | ID           | Email   |
 | :-------------: |:-------------:| -----:|
 | Yeahia Md. Arif| 1410070042 | yeahia.arif@northsouth.edu|
 | Jahin Mahbub      | 1531552642      |   jahin.mahbub@northsouth.edu |
