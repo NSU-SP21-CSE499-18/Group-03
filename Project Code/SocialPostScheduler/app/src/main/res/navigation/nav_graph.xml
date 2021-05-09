@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/shoppingFragment">
+
+    <fragment
+        android:id="@+id/shoppingFragment"
+        android:name="study.cse499.socialpostscheduler.ui.ShoppingFragment"
+        android:label="ShoppingFragment" >
+        <action
+            android:id="@+id/action_shoppingFragment_to_addShoppingFragment"
+            app:destination="@id/addShoppingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addShoppingFragment"
+        android:name="study.cse499.socialpostscheduler.ui.AddShoppingFragment"
+        android:label="AddShoppingFragment" >
+        <action
+            android:id="@+id/action_addShoppingFragment_to_imagePickFragment"
+            app:destination="@id/imagePickFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imagePickFragment"
+        android:name="study.cse499.socialpostscheduler.ui.ImagePickFragment"
+        android:label="ImagePickFragment" />
+</navigation>
