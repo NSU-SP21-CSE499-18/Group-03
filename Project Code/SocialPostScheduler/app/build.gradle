@@ -1,4 +1,11 @@
-
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id "androidx.navigation.safeargs.kotlin"
+    id 'dagger.hilt.android.plugin'
+}
 
 android {
     compileSdkVersion 30
@@ -10,7 +17,6 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        buildConfigField("String", "API_KEY", API_KEY)
         testInstrumentationRunner "study.cse499.socialpostscheduler.HiltTestRunner"
     }
 
