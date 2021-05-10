@@ -1,8 +1,10 @@
 package study.cse499.socialpostscheduler.other
 
+import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import java.util.*
 
+@ProvidedTypeConverter
 object DateTimeConverter {
     @TypeConverter
     fun toDate(dateLong: Long?): Date? {

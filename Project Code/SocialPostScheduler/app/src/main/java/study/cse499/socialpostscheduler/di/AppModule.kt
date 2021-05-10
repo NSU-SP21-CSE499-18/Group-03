@@ -11,7 +11,9 @@ import study.cse499.socialpostscheduler.data.local.ScheduleDao
 import study.cse499.socialpostscheduler.data.local.ScheduleData
 import study.cse499.socialpostscheduler.data.local.ScheduleDatabase
 import study.cse499.socialpostscheduler.other.Constants.DATABASE_NAME
+import study.cse499.socialpostscheduler.other.DateTimeConverter
 import study.cse499.socialpostscheduler.repository.DefaultScheduleRepository
+import study.cse499.socialpostscheduler.repository.ScheduleRepository
 import javax.inject.Singleton
 
 @Module
@@ -21,13 +23,13 @@ object AppModule {
     @Provides
     fun provideScheduleDatabase(
         @ApplicationContext context: Context
-    ) = Room.databaseBuilder(context, ScheduleDatabase::class.java, DATABASE_NAME)
+    ) = Room.databaseBuilder(context, ScheduleDatabase::class.java, DATABASE_NAME).build()
 
     @Singleton
     @Provides
     fun provideDefultScheduleRepository(
         scheduleDao: ScheduleDao
-    ) = DefaultScheduleRepository(scheduleDao)
+    ) = DefaultScheduleRepository(scheduleDao) as ScheduleRepository
 
     @Singleton
     @Provides
