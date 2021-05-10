@@ -1,4 +1,4 @@
-package study.cse499.socialpostscheduler
+package study.cse499.socialpostscheduler.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
