@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import study.cse499.socialpostscheduler.R
 import study.cse499.socialpostscheduler.viewmodel.ScheduleViewModel
 
-class ScheduleFragment () : Fragment(R.layout.fragment_schedule) {
+class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     lateinit var viewModel : ScheduleViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
