@@ -33,4 +33,11 @@ class ScheduleViewModelTest{
         var value = viewModel.insertScheduleItemStatus.getOrAwaitValueTest()
         assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
+
+    @Test
+    fun `insert schedule post with corret content, returns true`(){
+        viewModel.insertSchedulePost("Test Data", Calendar.getInstance().time)
+        var value = viewModel.insertScheduleItemStatus.getOrAwaitValueTest()
+        assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
 }

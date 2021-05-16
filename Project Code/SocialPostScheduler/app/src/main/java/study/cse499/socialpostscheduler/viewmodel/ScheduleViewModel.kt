@@ -32,7 +32,7 @@ class ScheduleViewModel @Inject constructor(
     }
 
     fun insertSchedulePost(postContent: String, scheduleTime: Date?) {
-        if(postContent.isEmpty() || scheduleTime != null){
+        if(postContent.isEmpty() || scheduleTime == null){
             _insertScheduleItemStatus.postValue(Event(Resource.error("data null or empty", null)))
             return
         }
