@@ -53,7 +53,7 @@ class ScheduleFragmentTest{
         onView(withId(R.id.etPostContent)).perform(ViewActions.replaceText("This is test contenet"))
         onView(withId(R.id.btSavePost)).perform(ViewActions.click())
         val scheduleData = ScheduleData("This is test contenet", Calendar.getInstance().time)
-        assertThat(testViewModel.schedulePosts.getOrAwaitValue()).isNotEmpty()
+        assertThat(testViewModel.schedulePosts.getOrAwaitValue()).contains(scheduleData)
     }
 
     @Test
