@@ -41,10 +41,10 @@ class ScheduleViewModel @Inject constructor(
             return
         }
 
-        if(isDateLessThanNow(scheduleTime)){
-            _insertScheduleItemStatus.postValue(Event(Resource.error("schedule date is less than current time", null)))
-            return
-        }
+//        if(isDateLessThanNow(scheduleTime)){
+//            _insertScheduleItemStatus.postValue(Event(Resource.error("schedule date is less than current time", null)))
+//            return
+//        }
 
         scheduleTime?.let {
             val scheduleData = ScheduleData(postContent, scheduleTime)
