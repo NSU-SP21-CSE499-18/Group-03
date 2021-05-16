@@ -14,7 +14,7 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(LoginViewModel::class.java)
         loginButton.setOnClickListener {
-
+            LoginFragmentDirections.actionLoginFragmentToScheduleFragment()
         }
 
     }
