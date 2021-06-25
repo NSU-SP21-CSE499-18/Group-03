@@ -35,9 +35,23 @@ class ScheduleViewModelTest{
     }
 
     @Test
-    fun `insert schedule post with corret content, returns true`(){
+    fun `insert schedule post with corret content, returns success`(){
         viewModel.insertSchedulePost("Test Data", Calendar.getInstance().time)
         var value = viewModel.insertScheduleItemStatus.getOrAwaitValueTest()
         assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    @Test
+    fun `insert schedule post with correct date, returns success`(){
+        viewModel.insertSchedulePost("Test Data", Calendar.getInstance().time)
+        var value = viewModel.insertScheduleItemStatus.getOrAwaitValueTest()
+        assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    @Test
+    fun `insert schedule post with incorret date, returns error`(){
+        viewModel.insertSchedulePost("Test Data", null)
+        var value = viewModel.insertScheduleItemStatus.getOrAwaitValueTest()
+        assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 }
