@@ -18,6 +18,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "study.cse499.socialpostscheduler.HiltTestRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -104,6 +105,9 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.1"
     testImplementation "com.google.truth:truth:1.0.1"
     testImplementation "org.mockito:mockito-core:2.21.0"
+
+    //facebook sdk
+    implementation 'com.facebook.android:facebook-login:11.0.0'
 
     // Instrumented Unit Tests
     androidTestImplementation "junit:junit:4.13.2"

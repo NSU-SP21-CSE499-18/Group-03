@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SocialPostScheduler</string>
+    <string name="facebook_app_id">1151420285305395</string>
+    <string name="fb_login_protocol_scheme">fb1151420285305395</string>
 </resources>
