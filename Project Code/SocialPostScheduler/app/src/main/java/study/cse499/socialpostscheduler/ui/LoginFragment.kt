@@ -6,14 +6,15 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
 import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import study.cse499.socialpostscheduler.R
+import study.cse499.socialpostscheduler.other.facebook_page.FacebookPageList
 import study.cse499.socialpostscheduler.viewmodel.LoginViewModel
 import timber.log.Timber
 
@@ -32,12 +33,26 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
 
         loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
             override fun onSuccess(loginResult: LoginResult?) {
+                loginResult?.let {
+                    val request = GraphRequest.newGraphPathRequest(
+                        loginResult.accessToken,
+                        "/${loginResult.accessToken.userId}/accounts") {
+                        it.rawResponse?.let { response ->
+                            LoginFragmentDirections.actionLoginFragmentToScheduleFragment(response)
+                        }
+
+                    }
+
+                    request.executeAsync()
+                }
             }
 
             override fun onCancel() {
+                Timber.d("cancel")
             }
 
             override fun onError(exception: FacebookException) {
+                Timber.d("onError $exception")
             }
         })
 
@@ -50,7 +65,9 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
     private fun initFacebookLogin(){
         val permissions = listOf(
             "public_profile",
-            "email")
+            "email",
+            "pages_manage_posts",
+            "pages_show_list")
         loginManager.logIn(this, permissions)
     }
 
