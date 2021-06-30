@@ -58,7 +58,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             val request = GraphRequest.newPostRequest(
                 accessTokenPage,
                 "/${objectData.id}/feed",
-                JSONObject("{message:${etPostContent.text.toString()}}")){
+                JSONObject("{\"message\":\"${etPostContent.text.toString()}\"}")){
 
             }
             request.executeAsync()

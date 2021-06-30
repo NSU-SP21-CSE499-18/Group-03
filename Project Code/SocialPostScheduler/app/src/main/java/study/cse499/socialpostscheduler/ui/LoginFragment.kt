@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.facebook.*
 import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
@@ -38,7 +39,8 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                         loginResult.accessToken,
                         "/${loginResult.accessToken.userId}/accounts") {
                         it.rawResponse?.let { response ->
-                            LoginFragmentDirections.actionLoginFragmentToScheduleFragment(response)
+                            val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(response)
+                            findNavController().navigate(action)
                         }
 
                     }
