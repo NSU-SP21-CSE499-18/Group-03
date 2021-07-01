@@ -10,9 +10,14 @@
         <action
             android:id="@+id/action_loginFragment_to_scheduleFragment"
             app:destination="@id/scheduleFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/scheduleFragment"
         android:name="study.cse499.socialpostscheduler.ui.ScheduleFragment"
-        android:label="ScheduleFragment" />
+        android:label="ScheduleFragment" >
+        <argument
+            android:name="accessToken"
+            app:argType="string" />
+    </fragment>
 </navigation>
