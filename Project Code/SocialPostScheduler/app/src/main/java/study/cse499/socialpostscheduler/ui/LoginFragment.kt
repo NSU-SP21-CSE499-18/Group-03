@@ -62,6 +62,10 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
             initFacebookLogin()
         }
 
+        loginInstagram.setOnClickListener {
+
+        }
+
     }
 
     private fun initFacebookLogin(){
@@ -71,6 +75,10 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
             "pages_manage_posts",
             "pages_show_list")
         loginManager.logIn(this, permissions)
+    }
+
+    private fun initInstagramLogin(){
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
