@@ -24,6 +24,9 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
     lateinit var viewModel : LoginViewModel
     lateinit var loginManager: LoginManager
     lateinit var callbackManager: CallbackManager
+    var facebookLogin: Boolean = false;
+    var instagramLogin: Boolean = false;
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(LoginViewModel::class.java)
@@ -35,17 +38,24 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
         loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
             override fun onSuccess(loginResult: LoginResult?) {
                 loginResult?.let {
-                    val request = GraphRequest.newGraphPathRequest(
-                        loginResult.accessToken,
-                        "/${loginResult.accessToken.userId}/accounts") {
-                        it.rawResponse?.let { response ->
-                            val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(response)
-                            findNavController().navigate(action)
+                    if(facebookLogin){
+                        val request = GraphRequest.newGraphPathRequest(
+                            loginResult.accessToken,
+                            "/${loginResult.accessToken.userId}/accounts") {
+                            it.rawResponse?.let { response ->
+                                val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(response)
+                                findNavController().navigate(action)
+                            }
+
                         }
+                        request.executeAsync()
+                    }
+                    if(instagramLogin){
 
                     }
 
-                    request.executeAsync()
+
+
                 }
             }
 
@@ -59,11 +69,15 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
         })
 
         loginButton.setOnClickListener {
+            instagramLogin = false;
+            facebookLogin = true;
             initFacebookLogin()
         }
 
         loginInstagram.setOnClickListener {
-
+            facebookLogin = false;
+            instagramLogin = true;
+            initInstagramLogin()
         }
 
     }
@@ -78,7 +92,13 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
     }
 
     private fun initInstagramLogin(){
-
+        val permissions = listOf(
+            "public_profile",
+            "email",
+            "instagram_basic",
+            "pages_manage_posts",
+            "pages_show_list")
+        loginManager.logIn(this, permissions)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
