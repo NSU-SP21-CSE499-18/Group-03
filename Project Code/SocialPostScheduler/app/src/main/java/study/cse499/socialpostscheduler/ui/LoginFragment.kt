@@ -1,5 +1,6 @@
 package study.cse499.socialpostscheduler.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -51,7 +52,46 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                         request.executeAsync()
                     }
                     if(instagramLogin){
+                        val request = GraphRequest.newGraphPathRequest(
+                            loginResult.accessToken,
+                            "/${loginResult.accessToken.userId}/accounts") { it ->
+                            it.rawResponse?.let { response ->
+                                val obj = Json.decodeFromString<FacebookPageList>(response)
+                                val objectData = obj.data[0]
+                                val accessTokenUser = AccessToken.getCurrentAccessToken()
+                                var accessTokenPage: AccessToken? = null
+                                accessTokenUser?.let{
+                                    accessTokenPage = AccessToken(
+                                        objectData.access_token,
+                                        accessTokenUser.applicationId,
+                                        accessTokenUser.userId,
+                                        accessTokenUser.permissions,
+                                        null,
+                                        null,
+                                        accessTokenUser.source,
+                                        accessTokenUser.expires,
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                }
+                                val instagramRequest = GraphRequest.newGraphPathRequest(
+                                    accessTokenPage,
+                                    "/${objectData.id}") { instagramResponse ->
+                                    instagramResponse.rawResponse?.let { instagramData ->
+                                        val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(instagramData)
+                                        findNavController().navigate(action)
+                                    }
+                                }
+                                val parameters = Bundle()
+                                parameters.putString("fields", "instagram_business_account")
+                                instagramRequest.parameters = parameters
+                                instagramRequest.executeAsync()
 
+                            }
+
+                        }
+                        request.executeAsync()
                     }
 
 
@@ -71,12 +111,24 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
         loginButton.setOnClickListener {
             instagramLogin = false;
             facebookLogin = true;
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+            with (sharedPref.edit()) {
+                putBoolean("isInstagram", instagramLogin)
+                putBoolean("isFacebook", facebookLogin)
+                apply()
+            }
             initFacebookLogin()
         }
 
         loginInstagram.setOnClickListener {
             facebookLogin = false;
             instagramLogin = true;
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+            with (sharedPref.edit()) {
+                putBoolean("isInstagram", instagramLogin)
+                putBoolean("isFacebook", facebookLogin)
+                apply()
+            }
             initInstagramLogin()
         }
 
