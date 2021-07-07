@@ -109,7 +109,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
             val request = GraphRequest.newPostRequest(
                 accessTokenUser,
-                "/${obj.instagram_business_account.id}/feed",
+                "/${obj.instagram_business_account.id}/media",
                 JSONObject("{\"image_url\":\"https://fastly.4sqi.net/img/general/200x200/zNv7bbjkQQNgGArHKtAeb0O9BMJ1zdFrE-EpUx3-YU0.jpg\"}")){
 
             }
