@@ -27,6 +27,7 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
     lateinit var callbackManager: CallbackManager
     var facebookLogin: Boolean = false;
     var instagramLogin: Boolean = false;
+    var twitterLogin: Boolean = false;
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -111,6 +112,7 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
         loginButton.setOnClickListener {
             instagramLogin = false;
             facebookLogin = true;
+            twitterLogin = false;
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
             with (sharedPref.edit()) {
                 putBoolean("isInstagram", instagramLogin)
@@ -123,6 +125,7 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
         loginInstagram.setOnClickListener {
             facebookLogin = false;
             instagramLogin = true;
+            twitterLogin = false;
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
             with (sharedPref.edit()) {
                 putBoolean("isInstagram", instagramLogin)
@@ -130,6 +133,20 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                 apply()
             }
             initInstagramLogin()
+        }
+
+        loginTwitter.setOnClickListener {
+            twitterLogin = true;
+            facebookLogin = false;
+            instagramLogin = false;
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+            with (sharedPref.edit()) {
+                putBoolean("isInstagram", instagramLogin)
+                putBoolean("isFacebook", facebookLogin)
+                putBoolean("isTwitter", twitterLogin)
+                apply()
+            }
+            initTwitterLogin();
         }
 
     }
@@ -151,6 +168,10 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
             "pages_manage_posts",
             "pages_show_list")
         loginManager.logIn(this, permissions)
+    }
+
+    private fun initTwitterLogin(){
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
