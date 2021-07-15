@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="Post Content">
+        android:hint="Write content">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPostContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="100dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -21,5 +21,6 @@
         android:id="@+id/btSavePost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Post"/>
+        android:layout_gravity="center"
+        android:text="Send"/>
 </LinearLayout>
