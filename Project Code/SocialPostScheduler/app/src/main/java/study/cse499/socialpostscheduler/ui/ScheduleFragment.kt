@@ -4,31 +4,29 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.work.*
 import com.facebook.AccessToken
 import com.facebook.GraphRequest
-import com.facebook.GraphResponse
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
 import study.cse499.socialpostscheduler.R
+import study.cse499.socialpostscheduler.SampleWorker
 import study.cse499.socialpostscheduler.other.facebook_page.FacebookPageList
 import study.cse499.socialpostscheduler.other.instagram_page.InstagramPage
 import study.cse499.socialpostscheduler.viewmodel.ScheduleViewModel
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
@@ -83,14 +81,30 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             )
         }
         btSavePost.setOnClickListener {
-            viewModel.insertSchedulePost(etPostContent.text.toString(), Calendar.getInstance().time)
-            val request = GraphRequest.newPostRequest(
-                accessTokenPage,
-                "/${objectData.id}/feed",
-                JSONObject("{\"message\":\"${etPostContent.text.toString()}\"}")){
+            val data = Data.Builder()
+                .putString("post_data",response)
+                .putString("body", etPostContent.text.toString())
+                .build()
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresCharging(true)
+                .build();
+            val oneTimeWorkRequest = OneTimeWorkRequest.Builder(SampleWorker::class.java)
+                .setInputData(data)
+                .setConstraints(constraints)
+                .setInitialDelay(10, TimeUnit.SECONDS)
+                .addTag("postdata")
+                .build()
 
-            }
-            request.executeAsync()
+            WorkManager.getInstance(requireContext()).enqueue(oneTimeWorkRequest)
+//            viewModel.insertSchedulePost(etPostContent.text.toString(), Calendar.getInstance().time)
+//            val request = GraphRequest.newPostRequest(
+//                accessTokenPage,
+//                "/${objectData.id}/feed",
+//                JSONObject("{\"message\":\"${etPostContent.text.toString()}\"}")){
+//
+//            }
+//            request.executeAsync()
         }
     }
 
