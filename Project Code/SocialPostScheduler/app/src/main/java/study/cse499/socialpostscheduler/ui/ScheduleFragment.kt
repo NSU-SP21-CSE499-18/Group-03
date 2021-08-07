@@ -1,6 +1,8 @@
 package study.cse499.socialpostscheduler.ui
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -58,6 +60,38 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
+        setDate()
+    }
+
+    fun setDate(){
+        tvDate.setOnClickListener {
+            val c = Calendar.getInstance()
+            val year_picker = c.get(Calendar.YEAR)
+            val month_picker = c.get(Calendar.MONTH)
+            val day_picker = c.get(Calendar.DAY_OF_MONTH)
+
+            val picker = DatePickerDialog(requireContext(),
+                { datePicker, year, month, day ->
+                    tvDate.setText(day.toString() + "/" + (month + 1) + "/" + year)
+                }, year_picker, month_picker, day_picker
+            )
+
+            picker.show()
+        }
+
+        tvTime.setOnClickListener {
+            val c = Calendar.getInstance()
+            val hour_picker = c.get(Calendar.HOUR_OF_DAY)
+            val min_picker = c.get(Calendar.MINUTE)
+            val timePickerDialog = TimePickerDialog(requireContext(),
+                { timePicker, hour, min ->
+                    tvTime.setText("$hour:$min")
+                }, hour_picker, min_picker, false
+            )
+
+            timePickerDialog.show()
+        }
+
     }
 
     fun facebookPost(response: String){
