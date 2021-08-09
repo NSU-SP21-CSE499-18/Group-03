@@ -3,4 +3,6 @@
     <string name="facebook_app_id">1151420285305395</string>
     <string name="fb_login_protocol_scheme">fb1151420285305395</string>
     <string name="facebook_client_token">9881943814ea5bfe9dad4a963a481516</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="fcm_message">Hello Title</string>
 </resources>

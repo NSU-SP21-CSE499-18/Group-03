@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1058464285660",
+    "project_id": "socialscheduler-9d79b",
+    "storage_bucket": "socialscheduler-9d79b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058464285660:android:e784204841212b7b700519",
+        "android_client_info": {
+          "package_name": "study.cse499.socialpostscheduler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058464285660-iie68g2m3qjrp0coop4sfqslti8vrklh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcGSjCD9mcrk5sA5cNpHSCrztRq3DYBoE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058464285660-iie68g2m3qjrp0coop4sfqslti8vrklh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
