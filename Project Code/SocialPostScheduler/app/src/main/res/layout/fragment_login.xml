@@ -1,27 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
+    <ImageView
+        android:layout_width="match_parent"
+        android:background="@drawable/background"
+        android:scaleType="fitXY"
+        android:layout_height="match_parent"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login With Facebook" />
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_logo"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/logo" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/facebook_rounded"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:text="Facebook" />
 
-    <Button
-        android:id="@+id/loginInstagram"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login With Instagram" />
 
-    <Button
-        android:id="@+id/loginTwitter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login With Twitter" />
-</LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginInstagram"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/instagram_rounded"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:text="Instagram" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginTwitter"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/twitter_rounded"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:text="Twitter" />
+    </LinearLayout>
+
+</FrameLayout>

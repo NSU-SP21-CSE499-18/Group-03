@@ -12,7 +12,7 @@ import org.json.JSONObject
 import study.cse499.socialpostscheduler.other.facebook_page.FacebookPageList
 import java.util.concurrent.TimeUnit
 
-class SampleWorker(context: Context, workerParameters: WorkerParameters) :
+class BackgroundWorker(context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
     override fun doWork(): Result {
         val inputData = inputData

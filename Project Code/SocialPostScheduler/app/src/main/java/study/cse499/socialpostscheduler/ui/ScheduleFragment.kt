@@ -23,7 +23,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
 import study.cse499.socialpostscheduler.R
-import study.cse499.socialpostscheduler.SampleWorker
+import study.cse499.socialpostscheduler.BackgroundWorker
 import study.cse499.socialpostscheduler.other.facebook_page.FacebookPageList
 import study.cse499.socialpostscheduler.other.instagram_page.InstagramPage
 import study.cse499.socialpostscheduler.viewmodel.ScheduleViewModel
@@ -123,7 +123,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .setRequiresCharging(true)
                 .build();
-            val oneTimeWorkRequest = OneTimeWorkRequest.Builder(SampleWorker::class.java)
+            val oneTimeWorkRequest = OneTimeWorkRequest.Builder(BackgroundWorker::class.java)
                 .setInputData(data)
                 .setConstraints(constraints)
                 .setInitialDelay(10, TimeUnit.SECONDS)
