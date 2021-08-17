@@ -1,34 +1,37 @@
 package study.cse499.socialpostscheduler.ui
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.work.*
 import com.facebook.AccessToken
 import com.facebook.GraphRequest
-import com.facebook.GraphResponse
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
+import study.cse499.socialpostscheduler.BackgroundWorker
 import study.cse499.socialpostscheduler.R
 import study.cse499.socialpostscheduler.other.facebook_page.FacebookPageList
 import study.cse499.socialpostscheduler.other.instagram_page.InstagramPage
 import study.cse499.socialpostscheduler.viewmodel.ScheduleViewModel
+import java.time.Duration
 import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.min
 
 
 class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
@@ -36,6 +39,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private val args: ScheduleFragmentArgs by navArgs()
     var facebookLogin: Boolean = false;
     var instagramLogin: Boolean = false;
+
+    var year_picker: Int = 0;
+    var month_picker: Int = 0;
+    var day_picker: Int = 0;
+    var hour_picker: Int = 0;
+    var min_picker: Int = 0;
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +69,43 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
+        setDate()
+    }
+
+    fun setDate(){
+        tvDate.setOnClickListener {
+            val c = Calendar.getInstance()
+            year_picker = c.get(Calendar.YEAR)
+            month_picker = c.get(Calendar.MONTH)
+            day_picker = c.get(Calendar.DAY_OF_MONTH)
+
+            val picker = DatePickerDialog(requireContext(),
+                { datePicker, year, month, day ->
+                    tvDate.setText(day.toString() + "/" + (month + 1) + "/" + year)
+                    year_picker = year
+                    month_picker = month
+                    day_picker = day
+                }, year_picker, month_picker, day_picker
+            )
+
+            picker.show()
+        }
+
+        tvTime.setOnClickListener {
+            val c = Calendar.getInstance()
+            hour_picker = c.get(Calendar.HOUR_OF_DAY)
+            min_picker = c.get(Calendar.MINUTE)
+            val timePickerDialog = TimePickerDialog(requireContext(),
+                { timePicker, hour, min ->
+                    tvTime.setText("$hour:$min")
+                    hour_picker = hour
+                    min_picker = min
+                }, hour_picker, min_picker, false
+            )
+
+            timePickerDialog.show()
+        }
+
     }
 
     fun facebookPost(response: String){
@@ -83,14 +129,62 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             )
         }
         btSavePost.setOnClickListener {
-            viewModel.insertSchedulePost(etPostContent.text.toString(), Calendar.getInstance().time)
-            val request = GraphRequest.newPostRequest(
-                accessTokenPage,
-                "/${objectData.id}/feed",
-                JSONObject("{\"message\":\"${etPostContent.text.toString()}\"}")){
+            val scheduleCal = Calendar.getInstance()
 
+            scheduleCal.set(Calendar.YEAR, year_picker)
+            scheduleCal.set(Calendar.MONTH, month_picker)
+            scheduleCal.set(Calendar.DAY_OF_MONTH, day_picker)
+            scheduleCal.set(Calendar.HOUR_OF_DAY, hour_picker)
+            scheduleCal.set(Calendar.MINUTE, min_picker)
+
+            val currentCal = Calendar.getInstance()
+
+            Log.d("minute", "year: " + year_picker)
+            Log.d("minute", "month: " + month_picker)
+            Log.d("minute", "day: " + day_picker)
+            Log.d("minute", "hour: " + hour_picker)
+            Log.d("minute", "minute: " + min_picker)
+
+            Log.d("minute", "currentcal: " + currentCal.timeInMillis)
+            Log.d("minute", "schedule: " + scheduleCal.timeInMillis)
+            if (currentCal.timeInMillis < scheduleCal.timeInMillis) {
+
+                val diff = scheduleCal.timeInMillis - currentCal.timeInMillis
+                val minute = TimeUnit.MILLISECONDS.toMinutes(diff)
+                Log.d("minute", "minute: " + minute)
+                Log.d("minute", "response: " + response)
+                Log.d("minute", "body: " + etPostContent.text.toString())
+                val data = Data.Builder()
+                    .putString("post_data",response)
+                    .putString("body", etPostContent.text.toString())
+                    .build()
+                val constraints = Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .setRequiresCharging(false)
+                    .build();
+                val oneTimeWorkRequest = OneTimeWorkRequest.Builder(BackgroundWorker::class.java)
+                    .setInputData(data)
+                    .setConstraints(constraints)
+                    .setInitialDelay(minute, TimeUnit.MINUTES)
+                    .addTag("postdata")
+                    .build()
+
+                WorkManager.getInstance(requireContext()).enqueue(oneTimeWorkRequest)
+
+                Toast.makeText(context, "Post Scheduled", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context, "Wrong Data Input", Toast.LENGTH_SHORT).show()
             }
-            request.executeAsync()
+
+
+//            viewModel.insertSchedulePost(etPostContent.text.toString(), Calendar.getInstance().time)
+//            val request = GraphRequest.newPostRequest(
+//                accessTokenPage,
+//                "/${objectData.id}/feed",
+//                JSONObject("{\"message\":\"${etPostContent.text.toString()}\"}")){
+//
+//            }
+//            request.executeAsync()
         }
     }
 
