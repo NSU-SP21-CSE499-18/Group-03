@@ -152,14 +152,15 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 val diff = scheduleCal.timeInMillis - currentCal.timeInMillis
                 val minute = TimeUnit.MILLISECONDS.toMinutes(diff)
                 Log.d("minute", "minute: " + minute)
-                val diffMinutes: Long = diff / (60 * 1000) % 60
+                Log.d("minute", "response: " + response)
+                Log.d("minute", "body: " + etPostContent.text.toString())
                 val data = Data.Builder()
                     .putString("post_data",response)
                     .putString("body", etPostContent.text.toString())
                     .build()
                 val constraints = Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .setRequiresCharging(true)
+                    .setRequiresCharging(false)
                     .build();
                 val oneTimeWorkRequest = OneTimeWorkRequest.Builder(BackgroundWorker::class.java)
                     .setInputData(data)
