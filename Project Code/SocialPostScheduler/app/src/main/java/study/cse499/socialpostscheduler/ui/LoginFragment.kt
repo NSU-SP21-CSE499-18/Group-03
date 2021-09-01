@@ -45,8 +45,19 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                             loginResult.accessToken,
                             "/${loginResult.accessToken.userId}/accounts") {
                             it.rawResponse?.let { response ->
-                                val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(response)
-                                findNavController().navigate(action)
+                                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE);
+                                with (sharedPref?.edit()) {
+                                    if(this != null){
+                                        putBoolean("isFacebook", true)
+                                        putString("facebook_token", response)
+                                        apply()
+                                    }
+                                }
+
+                                loginButton.text = "Facebook Connected";
+
+//                                val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(response)
+//                                findNavController().navigate(action)
                             }
 
                         }
@@ -81,9 +92,17 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                                     accessTokenPage,
                                     "/${objectData.id}") { instagramResponse ->
                                     instagramResponse.rawResponse?.let { instagramData ->
-                                        Log.d("instagram","instagramData response: " + instagramData);
-                                        val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(instagramData)
-                                        findNavController().navigate(action)
+                                        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE);
+                                        with (sharedPref?.edit()) {
+                                            if(this != null){
+                                                putBoolean("isInstagram", true)
+                                                putString("instagram_token", response)
+                                                apply()
+                                            }
+                                        }
+                                        loginInstagram.text = "Instagram Connected";
+//                                        val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(instagramData)
+//                                        findNavController().navigate(action)
                                     }
                                 }
                                 val parameters = Bundle()
