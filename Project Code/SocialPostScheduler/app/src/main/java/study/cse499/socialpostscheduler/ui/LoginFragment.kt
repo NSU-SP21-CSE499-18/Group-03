@@ -58,9 +58,10 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                             "/${loginResult.accessToken.userId}/accounts") { it ->
                             it.rawResponse?.let { response ->
                                 val obj = Json.decodeFromString<FacebookPageList>(response)
-                                val objectData = obj.data[0]
+                                val objectData = obj.data[1]
                                 val accessTokenUser = AccessToken.getCurrentAccessToken()
                                 var accessTokenPage: AccessToken? = null
+                                Log.d("instagram","instagram response: " + response);
                                 accessTokenUser?.let{
                                     accessTokenPage = AccessToken(
                                         objectData.access_token,
@@ -80,6 +81,7 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                                     accessTokenPage,
                                     "/${objectData.id}") { instagramResponse ->
                                     instagramResponse.rawResponse?.let { instagramData ->
+                                        Log.d("instagram","instagramData response: " + instagramData);
                                         val action  = LoginFragmentDirections.actionLoginFragmentToScheduleFragment(instagramData)
                                         findNavController().navigate(action)
                                     }
@@ -164,8 +166,11 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
         val permissions = listOf(
             "public_profile",
             "email",
+            "business_management",
             "instagram_basic",
             "pages_manage_posts",
+            "instagram_content_publish",
+            "pages_read_engagement",
             "pages_show_list")
         loginManager.logIn(this, permissions)
     }

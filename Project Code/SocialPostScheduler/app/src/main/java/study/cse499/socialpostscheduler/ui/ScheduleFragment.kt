@@ -27,6 +27,7 @@ import study.cse499.socialpostscheduler.BackgroundWorker
 import study.cse499.socialpostscheduler.R
 import study.cse499.socialpostscheduler.other.facebook_page.FacebookPageList
 import study.cse499.socialpostscheduler.other.instagram_page.InstagramPage
+import study.cse499.socialpostscheduler.other.instagram_page.MediaContainer
 import study.cse499.socialpostscheduler.viewmodel.ScheduleViewModel
 import java.time.Duration
 import java.util.*
@@ -204,11 +205,29 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             val request = GraphRequest.newPostRequest(
                 accessTokenUser,
                 "/${obj.instagram_business_account.id}/media",
-                JSONObject("{\"image_url\":\"https://fastly.4sqi.net/img/general/200x200/zNv7bbjkQQNgGArHKtAeb0O9BMJ1zdFrE-EpUx3-YU0.jpg\"}")){
+                JSONObject("{\"image_url\":\"https://fastly.4sqi.net/img/general/200x200/zNv7bbjkQQNgGArHKtAeb0O9BMJ1zdFrE-EpUx3-YU0.jpg\"}")){ it ->
+                it.rawResponse?.let { response ->
+                    val mediaContainerObj = Json.decodeFromString<MediaContainer>(response)
+                    publishInstagramContent(
+                        obj.instagram_business_account.id,
+                        mediaContainerObj.id,
+                        accessTokenUser
+                    )
+                }
 
             }
             request.executeAsync()
         }
+    }
+
+    fun publishInstagramContent(accountId: String , containerId: String, access_token: AccessToken?){
+        val request = GraphRequest.newPostRequest(
+            access_token,
+            "/${accountId}/media_publish",
+            JSONObject("{\"creation_id\":\"${containerId}\"}")){
+            Toast.makeText(context, "Content Uploaded", Toast.LENGTH_SHORT).show()
+        }
+        request.executeAsync()
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
