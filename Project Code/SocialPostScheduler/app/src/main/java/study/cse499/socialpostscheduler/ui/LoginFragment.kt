@@ -45,6 +45,7 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                             loginResult.accessToken,
                             "/${loginResult.accessToken.userId}/accounts") {
                             it.rawResponse?.let { response ->
+                                Log.d("response", response);
                                 val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE);
                                 with (sharedPref?.edit()) {
                                     if(this != null){
@@ -92,6 +93,7 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
                                     accessTokenPage,
                                     "/${objectData.id}") { instagramResponse ->
                                     instagramResponse.rawResponse?.let { instagramData ->
+                                        Log.d("response", instagramData);
                                         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE);
                                         with (sharedPref?.edit()) {
                                             if(this != null){
@@ -130,46 +132,65 @@ class LoginFragment (): Fragment(R.layout.fragment_login) {
             }
         })
 
+        checkLoginStatus();
         loginButton.setOnClickListener {
-            instagramLogin = false;
-            facebookLogin = true;
             twitterLogin = false;
+            facebookLogin = true;
+            instagramLogin = false;
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
             with (sharedPref.edit()) {
-                putBoolean("isInstagram", instagramLogin)
-                putBoolean("isFacebook", facebookLogin)
+                putBoolean("isInstagramLogin", instagramLogin)
+                putBoolean("isFacebookLogin", facebookLogin)
+                putBoolean("isTwitterLogin", twitterLogin)
                 apply()
             }
             initFacebookLogin()
         }
 
         loginInstagram.setOnClickListener {
+            twitterLogin = false;
             facebookLogin = false;
             instagramLogin = true;
-            twitterLogin = false;
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
             with (sharedPref.edit()) {
-                putBoolean("isInstagram", instagramLogin)
-                putBoolean("isFacebook", facebookLogin)
+                putBoolean("isInstagramLogin", instagramLogin)
+                putBoolean("isFacebookLogin", facebookLogin)
+                putBoolean("isTwitterLogin", twitterLogin)
                 apply()
             }
             initInstagramLogin()
         }
 
         loginTwitter.setOnClickListener {
-            twitterLogin = true;
-            facebookLogin = false;
-            instagramLogin = false;
-            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
-            with (sharedPref.edit()) {
-                putBoolean("isInstagram", instagramLogin)
-                putBoolean("isFacebook", facebookLogin)
-                putBoolean("isTwitter", twitterLogin)
-                apply()
-            }
+//            twitterLogin = true;
+//            facebookLogin = false;
+//            instagramLogin = false;
+//            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+//            with (sharedPref.edit()) {
+//                putBoolean("isInstagram", instagramLogin)
+//                putBoolean("isFacebook", facebookLogin)
+//                putBoolean("isTwitter", twitterLogin)
+//                apply()
+//            }
             initTwitterLogin();
         }
 
+    }
+
+    private fun checkLoginStatus(){
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        sharedPref?.let {
+            val isInstagramAvailable = it.getBoolean("isInstagram",false)
+            val isFacebookAvailable = it.getBoolean("isFacebook",false)
+
+            if(isInstagramAvailable){
+                loginInstagram.text = "Instagram Connected";
+            }
+            if(isFacebookAvailable){
+                loginButton.text = "Facebook Connected";
+            }
+
+        }
     }
 
     private fun initFacebookLogin(){
