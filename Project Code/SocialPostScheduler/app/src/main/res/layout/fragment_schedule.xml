@@ -66,6 +66,24 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        android:hint="Image Url">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPostContentUrl"
+            android:layout_width="match_parent"
+            android:background="@drawable/white_rounded"
+            android:layout_gravity="start"
+            android:layout_height="50dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <LinearLayout
         android:id="@+id/uploadImageContainer"
         android:layout_width="match_parent"
@@ -118,7 +136,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                android:checked="true"
                 android:layout_marginRight="20dp"
                 android:text="Now"/>
 
@@ -159,6 +176,30 @@
                 android:text="set time"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_rounded"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/llStatus"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:padding="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="Status: "/>
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton

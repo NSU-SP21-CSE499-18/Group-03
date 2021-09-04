@@ -62,11 +62,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             instagramLogin = it.getBoolean("isInstagram",false)
             facebookLogin = it.getBoolean("isFacebook",false)
 
-            if(instagramLogin){
+            if(facebookLogin){
                 checkboxFacebook.visibility = View.VISIBLE
             }
 
-            if(facebookLogin){
+            if(instagramLogin){
                 checkboxInstagram.visibility = View.VISIBLE
             }
 
@@ -84,23 +84,16 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             checkboxInstagram.setOnCheckedChangeListener { _, isChecked ->
                 if(checkboxFacebook.isChecked || checkboxInstagram.isChecked){
                     textInputLayout.visibility = View.VISIBLE
+                    llPostTypeContainer.visibility = View.VISIBLE
                 }else{
                     textInputLayout.visibility = View.GONE
+                    llPostTypeContainer.visibility = View.GONE
                 }
 
                 if(isChecked){
-                    uploadImageContainer.visibility = View.VISIBLE
+                    textInputLayoutUrl.visibility = View.VISIBLE
                 }else{
-                    uploadImageContainer.visibility = View.GONE
-                }
-            }
-
-            if(checkboxFacebook.isChecked){
-                val response = sharedPref.getString("facebook_token", "");
-                response?.let {
-                    if(checkboxScheduleNow.isChecked){
-                        facebookPost(it);
-                    }
+                    textInputLayoutUrl.visibility = View.GONE
                 }
             }
 
@@ -108,13 +101,25 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 if(isChecked){
                     checkboxScheduleLater.isChecked = false;
                 }
+                if(checkboxScheduleNow.isChecked || checkboxScheduleLater.isChecked){
+                    llStatus.visibility = View.VISIBLE
+                }
             }
 
             checkboxScheduleLater.setOnCheckedChangeListener { _, isChecked ->
                 if(isChecked){
                     checkboxScheduleNow.isChecked = false;
+                    scheduleTimeContainer.visibility = View.VISIBLE;
+                }else{
+                    scheduleTimeContainer.visibility = View.GONE;
+                }
+
+                if(checkboxScheduleNow.isChecked || checkboxScheduleLater.isChecked){
+                    llStatus.visibility = View.VISIBLE
                 }
             }
+
+            sendButtonAction();
 
 //            if(facebookLogin){
 //                facebookPost(response)
@@ -123,8 +128,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 //            }
 
         }
-//        requireActivity().onBackPressedDispatcher.addCallback(callback)
-//        setDate()
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
+        setDate();
     }
 
     fun setDate(){
@@ -163,17 +168,132 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     }
 
-    fun facebookPost(response: String){
-        val obj = Json.decodeFromString<FacebookPageList>(response)
-        val objectData = obj.data[0]
-        val accessTokenUser = AccessToken.getCurrentAccessToken()
-        var accessTokenPage: AccessToken? = null
-        accessTokenUser?.let{
-            accessTokenPage = AccessToken(
-                objectData.access_token,
+    fun sendButtonAction(){
+        btSavePost.setOnClickListener {
+            if(checkboxScheduleNow.isChecked){
+                if(checkboxFacebook.isChecked){
+                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                    sharedPref?.let {pref ->
+                        val response = pref.getString("facebook_token", "");
+                        response?.let {
+                            if(checkboxScheduleNow.isChecked){
+                                facebookPost(it, etPostContent.text.toString());
+                            }
+                        }
+                    }
+
+                }else{
+                    if(checkboxInstagram.isChecked){
+                        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                        sharedPref?.let { pref ->
+                            val response = pref.getString("instagram_token", "");
+                            response?.let {
+                                if (checkboxScheduleNow.isChecked) {
+                                    instagramPost(it);
+                                }
+                            }
+                        }
+                    }
+                }
+//
+            }else {
+
+                val scheduleCal = Calendar.getInstance()
+                scheduleCal.set(Calendar.YEAR, year_picker)
+                scheduleCal.set(Calendar.MONTH, month_picker)
+                scheduleCal.set(Calendar.DAY_OF_MONTH, day_picker)
+                scheduleCal.set(Calendar.HOUR_OF_DAY, hour_picker)
+                scheduleCal.set(Calendar.MINUTE, min_picker)
+
+                val currentCal = Calendar.getInstance()
+
+                Log.d("minute", "year: " + year_picker)
+                Log.d("minute", "month: " + month_picker)
+                Log.d("minute", "day: " + day_picker)
+                Log.d("minute", "hour: " + hour_picker)
+                Log.d("minute", "minute: " + min_picker)
+
+                Log.d("minute", "currentcal: " + currentCal.timeInMillis)
+                Log.d("minute", "schedule: " + scheduleCal.timeInMillis)
+                if (currentCal.timeInMillis < scheduleCal.timeInMillis) {
+
+                    val diff = scheduleCal.timeInMillis - currentCal.timeInMillis
+                    val minute = TimeUnit.MILLISECONDS.toMinutes(diff)
+
+                    var facebookData = "";
+                    var instagramData = "";
+
+                    if (checkboxFacebook.isChecked) {
+                        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                        sharedPref?.let { pref ->
+                            val response = pref.getString("facebook_token", "");
+                            response?.let {
+                                facebookData = it;
+                            }
+                        }
+
+                    } else {
+                        if (checkboxInstagram.isChecked) {
+                            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                            sharedPref?.let { pref ->
+                                val response = pref.getString("instagram_token", "");
+                                response?.let {
+                                    instagramData = it;
+                                }
+                            }
+                        }
+                    }
+
+                    val data = Data.Builder()
+                        .putString("post_data_facebook", facebookData)
+                        .putString("post_data_instagram", instagramData)
+                        .putString("body", etPostContent.text.toString())
+                        .putString("image", etPostContentUrl.text.toString())
+                        .putBoolean("isFacebook", checkboxFacebook.isChecked)
+                        .putBoolean("isInstagram", checkboxInstagram.isChecked)
+                        .build()
+                    val constraints = Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .setRequiresCharging(false)
+                        .build();
+                    val oneTimeWorkRequest =
+                        OneTimeWorkRequest.Builder(BackgroundWorker::class.java)
+                            .setInputData(data)
+                            .setConstraints(constraints)
+                            .setInitialDelay(minute, TimeUnit.MINUTES)
+                            .addTag("postdata")
+                            .build()
+
+                    WorkManager.getInstance(requireContext()).enqueue(oneTimeWorkRequest)
+
+                    Toast.makeText(context, "Post Scheduled", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Wrong Data Input", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    fun instagramPost(response: String){
+        tvStatus.text = "Instagram Post Uploading"
+        val obj = Json.decodeFromString<InstagramPage>(response)
+        var accessTokenUser = AccessToken.getCurrentAccessToken()
+        val permissions = listOf(
+            "public_profile",
+            "email",
+            "business_management",
+            "instagram_basic",
+            "pages_manage_posts",
+            "instagram_content_publish",
+            "pages_read_engagement",
+            "pages_show_list")
+
+        accessTokenUser?.let {
+            val newToken = AccessToken(
+                accessTokenUser.token,
                 accessTokenUser.applicationId,
                 accessTokenUser.userId,
-                accessTokenUser.permissions,
+                permissions,
                 null,
                 null,
                 accessTokenUser.source,
@@ -182,87 +302,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 null,
                 null
             )
-        }
-        btSavePost.setOnClickListener {
-
-
-            facebookPost(response, etPostContent.text.toString());
-//            val scheduleCal = Calendar.getInstance()
-//
-//            scheduleCal.set(Calendar.YEAR, year_picker)
-//            scheduleCal.set(Calendar.MONTH, month_picker)
-//            scheduleCal.set(Calendar.DAY_OF_MONTH, day_picker)
-//            scheduleCal.set(Calendar.HOUR_OF_DAY, hour_picker)
-//            scheduleCal.set(Calendar.MINUTE, min_picker)
-//
-//            val currentCal = Calendar.getInstance()
-//
-//            Log.d("minute", "year: " + year_picker)
-//            Log.d("minute", "month: " + month_picker)
-//            Log.d("minute", "day: " + day_picker)
-//            Log.d("minute", "hour: " + hour_picker)
-//            Log.d("minute", "minute: " + min_picker)
-//
-//            Log.d("minute", "currentcal: " + currentCal.timeInMillis)
-//            Log.d("minute", "schedule: " + scheduleCal.timeInMillis)
-//            if (currentCal.timeInMillis < scheduleCal.timeInMillis) {
-//
-//                val diff = scheduleCal.timeInMillis - currentCal.timeInMillis
-//                val minute = TimeUnit.MILLISECONDS.toMinutes(diff)
-//                Log.d("minute", "minute: " + minute)
-//                Log.d("minute", "response: " + response)
-//                Log.d("minute", "body: " + etPostContent.text.toString())
-//                val data = Data.Builder()
-//                    .putString("post_data",response)
-//                    .putString("body", etPostContent.text.toString())
-//                    .build()
-//                val constraints = Constraints.Builder()
-//                    .setRequiredNetworkType(NetworkType.CONNECTED)
-//                    .setRequiresCharging(false)
-//                    .build();
-//                val oneTimeWorkRequest = OneTimeWorkRequest.Builder(BackgroundWorker::class.java)
-//                    .setInputData(data)
-//                    .setConstraints(constraints)
-//                    .setInitialDelay(minute, TimeUnit.MINUTES)
-//                    .addTag("postdata")
-//                    .build()
-//
-//                WorkManager.getInstance(requireContext()).enqueue(oneTimeWorkRequest)
-//
-//                Toast.makeText(context, "Post Scheduled", Toast.LENGTH_SHORT).show()
-//            }else{
-//                Toast.makeText(context, "Wrong Data Input", Toast.LENGTH_SHORT).show()
-//            }
-
-
-//            viewModel.insertSchedulePost(etPostContent.text.toString(), Calendar.getInstance().time)
-//            val request = GraphRequest.newPostRequest(
-//                accessTokenPage,
-//                "/${objectData.id}/feed",
-//                JSONObject("{\"message\":\"${etPostContent.text.toString()}\"}")){
-//
-//            }
-//            request.executeAsync()
-        }
-    }
-
-    fun instagramPost(response: String){
-        val obj = Json.decodeFromString<InstagramPage>(response)
-        val accessTokenUser = AccessToken.getCurrentAccessToken()
-        uploadImageContainer.visibility = View.VISIBLE
-        btUploadImage.setOnClickListener {
-            ImagePicker.with(this) //Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .start()
-        }
-        btSavePost.setOnClickListener {
-            viewModel.insertSchedulePost(etPostContent.text.toString(), Calendar.getInstance().time)
 
             val request = GraphRequest.newPostRequest(
-                accessTokenUser,
+                newToken,
                 "/${obj.instagram_business_account.id}/media",
-                JSONObject("{\"image_url\":\"https://fastly.4sqi.net/img/general/200x200/zNv7bbjkQQNgGArHKtAeb0O9BMJ1zdFrE-EpUx3-YU0.jpg\"}")){ it ->
+                JSONObject("{\"image_url\":\"${etPostContentUrl.text.toString()}\"}")){ it ->
                 it.rawResponse?.let { response ->
                     val mediaContainerObj = Json.decodeFromString<MediaContainer>(response)
                     publishInstagramContent(
@@ -275,6 +319,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             }
             request.executeAsync()
         }
+//        uploadImageContainer.visibility = View.VISIBLE
+//        btUploadImage.setOnClickListener {
+//            ImagePicker.with(this) //Crop image(Optional), Check Customization for more option
+//                .compress(1024)			//Final image size will be less than 1 MB(Optional)
+//                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+//                .start()
+//        }
+
     }
 
     fun publishInstagramContent(accountId: String , containerId: String, access_token: AccessToken?){
@@ -283,6 +335,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             "/${accountId}/media_publish",
             JSONObject("{\"creation_id\":\"${containerId}\"}")){
             Toast.makeText(context, "Content Uploaded", Toast.LENGTH_SHORT).show()
+            tvStatus.text = "Instagram Upload Completed"
         }
         request.executeAsync()
     }
@@ -303,17 +356,25 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
     }
 
-    fun facebookPost(response: String?, body: String?){
+    fun facebookPost(response: String?, body: String?) {
+
+        tvStatus.text = "Facebook Post Sending"
         val obj = Json.decodeFromString<FacebookPageList>(response!!)
         val objectData = obj.data[0]
         val accessTokenUser = AccessToken.getCurrentAccessToken()
         var accessTokenPage: AccessToken? = null
-        accessTokenUser?.let{
+        val permissions = listOf(
+            "public_profile",
+            "email",
+            "pages_manage_posts",
+            "pages_show_list"
+        )
+        accessTokenUser?.let {
             accessTokenPage = AccessToken(
                 objectData.access_token,
                 accessTokenUser.applicationId,
                 accessTokenUser.userId,
-                accessTokenUser.permissions,
+                permissions,
                 null,
                 null,
                 accessTokenUser.source,
@@ -322,15 +383,35 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 null,
                 null
             )
-        }
+            var url = "";
+            var jsonObject = JSONObject();
+            if(checkboxInstagram.isChecked){
+                url = "/${objectData.id}/photos"
+                jsonObject = JSONObject("{\"message\":\"${body}\", \"url\":\"${etPostContentUrl.text.toString()}\"}")
+            }else{
+                url = "/${objectData.id}/feed"
+                jsonObject = JSONObject("{\"message\":\"${body}\"}");
+            }
+            val request = GraphRequest.newPostRequest(
+                accessTokenPage,
+                url,
+                jsonObject
 
-        val request = GraphRequest.newPostRequest(
-            accessTokenPage,
-            "/${objectData.id}/feed",
-            JSONObject("{\"message\":\"${body}\"}")
-        ){
-
+            ) {
+                tvStatus.text = "Facebook Post Completed"
+                if(checkboxInstagram.isChecked){
+                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                    sharedPref?.let { pref ->
+                        val response = pref.getString("instagram_token", "");
+                        response?.let {
+                            if (checkboxScheduleNow.isChecked) {
+                                instagramPost(it);
+                            }
+                        }
+                    }
+                }
+            }
+            request.executeAsync()
         }
-        request.executeAndWait()
     }
 }

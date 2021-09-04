@@ -11,7 +11,11 @@
     <fragment
         android:id="@+id/scheduleFragment"
         android:name="study.cse499.socialpostscheduler.ui.ScheduleFragment"
-        android:label="ScheduleFragment" />
+        android:label="ScheduleFragment" >
+        <action
+            android:id="@+id/action_scheduleFragment_to_landingFragment"
+            app:destination="@id/landingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/landingFragment"
         android:name="study.cse499.socialpostscheduler.ui.LandingFragment"
