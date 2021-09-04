@@ -37,7 +37,6 @@ import kotlin.math.min
 
 class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     lateinit var viewModel : ScheduleViewModel
-    private val args: ScheduleFragmentArgs by navArgs()
     var facebookLogin: Boolean = false;
     var instagramLogin: Boolean = false;
 
@@ -56,21 +55,76 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             }
         }
 
+
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         sharedPref?.let {
-            val response = args.accessToken
+            val response = "";
             instagramLogin = it.getBoolean("isInstagram",false)
             facebookLogin = it.getBoolean("isFacebook",false)
 
-            if(facebookLogin){
-                facebookPost(response)
-            }else{
-                instagramPost(response)
+            if(instagramLogin){
+                checkboxFacebook.visibility = View.VISIBLE
             }
 
+            if(facebookLogin){
+                checkboxInstagram.visibility = View.VISIBLE
+            }
+
+
+            checkboxFacebook.setOnCheckedChangeListener { _, isChecked ->
+                if(checkboxFacebook.isChecked || checkboxInstagram.isChecked){
+                    textInputLayout.visibility = View.VISIBLE
+                    llPostTypeContainer.visibility = View.VISIBLE
+                }else{
+                    textInputLayout.visibility = View.GONE
+                    llPostTypeContainer.visibility = View.GONE
+                }
+            }
+
+            checkboxInstagram.setOnCheckedChangeListener { _, isChecked ->
+                if(checkboxFacebook.isChecked || checkboxInstagram.isChecked){
+                    textInputLayout.visibility = View.VISIBLE
+                }else{
+                    textInputLayout.visibility = View.GONE
+                }
+
+                if(isChecked){
+                    uploadImageContainer.visibility = View.VISIBLE
+                }else{
+                    uploadImageContainer.visibility = View.GONE
+                }
+            }
+
+            if(checkboxFacebook.isChecked){
+                val response = sharedPref.getString("facebook_token", "");
+                response?.let {
+                    if(checkboxScheduleNow.isChecked){
+                        facebookPost(it);
+                    }
+                }
+            }
+
+            checkboxScheduleNow.setOnCheckedChangeListener { _, isChecked ->
+                if(isChecked){
+                    checkboxScheduleLater.isChecked = false;
+                }
+            }
+
+            checkboxScheduleLater.setOnCheckedChangeListener { _, isChecked ->
+                if(isChecked){
+                    checkboxScheduleNow.isChecked = false;
+                }
+            }
+
+//            if(facebookLogin){
+//                facebookPost(response)
+//            }else{
+//                instagramPost(response)
+//            }
+
         }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-        setDate()
+//        requireActivity().onBackPressedDispatcher.addCallback(callback)
+//        setDate()
     }
 
     fun setDate(){
@@ -130,52 +184,55 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             )
         }
         btSavePost.setOnClickListener {
-            val scheduleCal = Calendar.getInstance()
 
-            scheduleCal.set(Calendar.YEAR, year_picker)
-            scheduleCal.set(Calendar.MONTH, month_picker)
-            scheduleCal.set(Calendar.DAY_OF_MONTH, day_picker)
-            scheduleCal.set(Calendar.HOUR_OF_DAY, hour_picker)
-            scheduleCal.set(Calendar.MINUTE, min_picker)
 
-            val currentCal = Calendar.getInstance()
-
-            Log.d("minute", "year: " + year_picker)
-            Log.d("minute", "month: " + month_picker)
-            Log.d("minute", "day: " + day_picker)
-            Log.d("minute", "hour: " + hour_picker)
-            Log.d("minute", "minute: " + min_picker)
-
-            Log.d("minute", "currentcal: " + currentCal.timeInMillis)
-            Log.d("minute", "schedule: " + scheduleCal.timeInMillis)
-            if (currentCal.timeInMillis < scheduleCal.timeInMillis) {
-
-                val diff = scheduleCal.timeInMillis - currentCal.timeInMillis
-                val minute = TimeUnit.MILLISECONDS.toMinutes(diff)
-                Log.d("minute", "minute: " + minute)
-                Log.d("minute", "response: " + response)
-                Log.d("minute", "body: " + etPostContent.text.toString())
-                val data = Data.Builder()
-                    .putString("post_data",response)
-                    .putString("body", etPostContent.text.toString())
-                    .build()
-                val constraints = Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .setRequiresCharging(false)
-                    .build();
-                val oneTimeWorkRequest = OneTimeWorkRequest.Builder(BackgroundWorker::class.java)
-                    .setInputData(data)
-                    .setConstraints(constraints)
-                    .setInitialDelay(minute, TimeUnit.MINUTES)
-                    .addTag("postdata")
-                    .build()
-
-                WorkManager.getInstance(requireContext()).enqueue(oneTimeWorkRequest)
-
-                Toast.makeText(context, "Post Scheduled", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(context, "Wrong Data Input", Toast.LENGTH_SHORT).show()
-            }
+            facebookPost(response, etPostContent.text.toString());
+//            val scheduleCal = Calendar.getInstance()
+//
+//            scheduleCal.set(Calendar.YEAR, year_picker)
+//            scheduleCal.set(Calendar.MONTH, month_picker)
+//            scheduleCal.set(Calendar.DAY_OF_MONTH, day_picker)
+//            scheduleCal.set(Calendar.HOUR_OF_DAY, hour_picker)
+//            scheduleCal.set(Calendar.MINUTE, min_picker)
+//
+//            val currentCal = Calendar.getInstance()
+//
+//            Log.d("minute", "year: " + year_picker)
+//            Log.d("minute", "month: " + month_picker)
+//            Log.d("minute", "day: " + day_picker)
+//            Log.d("minute", "hour: " + hour_picker)
+//            Log.d("minute", "minute: " + min_picker)
+//
+//            Log.d("minute", "currentcal: " + currentCal.timeInMillis)
+//            Log.d("minute", "schedule: " + scheduleCal.timeInMillis)
+//            if (currentCal.timeInMillis < scheduleCal.timeInMillis) {
+//
+//                val diff = scheduleCal.timeInMillis - currentCal.timeInMillis
+//                val minute = TimeUnit.MILLISECONDS.toMinutes(diff)
+//                Log.d("minute", "minute: " + minute)
+//                Log.d("minute", "response: " + response)
+//                Log.d("minute", "body: " + etPostContent.text.toString())
+//                val data = Data.Builder()
+//                    .putString("post_data",response)
+//                    .putString("body", etPostContent.text.toString())
+//                    .build()
+//                val constraints = Constraints.Builder()
+//                    .setRequiredNetworkType(NetworkType.CONNECTED)
+//                    .setRequiresCharging(false)
+//                    .build();
+//                val oneTimeWorkRequest = OneTimeWorkRequest.Builder(BackgroundWorker::class.java)
+//                    .setInputData(data)
+//                    .setConstraints(constraints)
+//                    .setInitialDelay(minute, TimeUnit.MINUTES)
+//                    .addTag("postdata")
+//                    .build()
+//
+//                WorkManager.getInstance(requireContext()).enqueue(oneTimeWorkRequest)
+//
+//                Toast.makeText(context, "Post Scheduled", Toast.LENGTH_SHORT).show()
+//            }else{
+//                Toast.makeText(context, "Wrong Data Input", Toast.LENGTH_SHORT).show()
+//            }
 
 
 //            viewModel.insertSchedulePost(etPostContent.text.toString(), Calendar.getInstance().time)
@@ -244,5 +301,36 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }else if (resultCode == ImagePicker.RESULT_ERROR) {
             Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun facebookPost(response: String?, body: String?){
+        val obj = Json.decodeFromString<FacebookPageList>(response!!)
+        val objectData = obj.data[0]
+        val accessTokenUser = AccessToken.getCurrentAccessToken()
+        var accessTokenPage: AccessToken? = null
+        accessTokenUser?.let{
+            accessTokenPage = AccessToken(
+                objectData.access_token,
+                accessTokenUser.applicationId,
+                accessTokenUser.userId,
+                accessTokenUser.permissions,
+                null,
+                null,
+                accessTokenUser.source,
+                accessTokenUser.expires,
+                null,
+                null,
+                null
+            )
+        }
+
+        val request = GraphRequest.newPostRequest(
+            accessTokenPage,
+            "/${objectData.id}/feed",
+            JSONObject("{\"message\":\"${body}\"}")
+        ){
+
+        }
+        request.executeAndWait()
     }
 }
