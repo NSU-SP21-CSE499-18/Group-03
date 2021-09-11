@@ -156,6 +156,7 @@ class BackgroundWorker(context: Context, workerParameters: WorkerParameters) :
             access_token,
             "/${accountId}/media_publish",
             JSONObject("{\"creation_id\":\"${containerId}\"}")){
+            Log.d("response","instaram respone ${it.rawResponse}");
         }
         request.executeAndWait()
     }
